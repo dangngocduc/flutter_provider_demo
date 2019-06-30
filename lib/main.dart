@@ -8,8 +8,11 @@ import 'package:flutter_provider_demo/features/listenable_provider/listenable_pr
 import 'package:flutter_provider_demo/features/provider/provider.dart';
 import 'package:flutter_provider_demo/features/value_listenable/value_listenable_provider.dart';
 import 'package:provider/provider.dart';
+import 'helpers/utils.dart';
+import 'bloc/stream_provider/StreamCounter.dart';
 
 import 'features/changenotifier_provider/change_notifier_provider.dart';
+import 'features/stream_provider/value_stream_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,6 +24,7 @@ const RoundedRectangleBorder mRadiusBorder = RoundedRectangleBorder(
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    utils.counterController.add(StreamCounter(currentValue: 0));
     return MultiProvider(
         providers: [
           Provider<ProviderDemoBloc>.value(
@@ -31,7 +35,8 @@ class MyApp extends StatelessWidget {
               }),
           ListenableProvider<ListenableProviderDemoBloc>.value(value: ListenableProviderDemoBloc()),
           ChangeNotifierProvider<ChangeNotifierProviderDemoBloc>.value(value: ChangeNotifierProviderDemoBloc()),
-          ValueListenableProvider<Counter>.value(value:  ValueNotifier(Counter(currentValue:10)))
+          ValueListenableProvider<Counter>.value(value:  ValueNotifier(Counter(currentValue:10))),
+          StreamProvider.value(value: utils.counterController.stream)
         ],
         child: MaterialApp(
           title: 'Flutter Provider Demo',
@@ -101,7 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("ValueListenableProvider Demo"),
                 shape: mRadiusBorder),
             OutlineButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return StreamProviderDemoWidget();
+                  }));
+                },
                 child: Text("StreamProvider Demo"),
                 shape: mRadiusBorder),
             OutlineButton(
