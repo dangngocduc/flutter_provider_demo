@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ListenableProvider<ListenableProviderDemoBloc>.value(value: ListenableProviderDemoBloc()),
           ChangeNotifierProvider<ChangeNotifierProviderDemoBloc>.value(value: ChangeNotifierProviderDemoBloc()),
           ValueListenableProvider<Counter>.value(value:  ValueNotifier(Counter(currentValue:10))),
-          StreamProvider.value(value: utils.counterController.stream)
+          StreamProvider.value(value: utils.demoStream(),initialData: StreamCounter(currentValue: 0),)
         ],
         child: MaterialApp(
           title: 'Flutter Provider Demo',
@@ -60,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    print("render home");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
